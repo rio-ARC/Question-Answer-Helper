@@ -2,7 +2,7 @@
  * Oracle of Delphi — API Integration
  */
 
-const API_URL = 'http://localhost:8000/chat';
+const API_URL = 'https://oracle-delphi-api.onrender.com/chat';
 
 let sessionId = sessionStorage.getItem('oracle_session') || 'session-' + Date.now();
 sessionStorage.setItem('oracle_session', sessionId);
