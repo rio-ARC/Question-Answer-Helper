@@ -1,9 +1,10 @@
 # AI Question-Answer Helper 🤖
 
-A simple AI agent built with LangGraph that intelligently answers user questions, uses a dictionary-based search tool for factual queries, and maintains conversation memory.
+A simple AI agent built with LangGraph that intelligently answers user questions, uses a dictionary-based search tool for factual queries, and maintains conversation memory. Features an immersive **Oracle of Delphi** themed frontend.
 
 ## ✨ Features
 
+- **Oracle of Delphi Frontend**: Immersive Greek mythology themed UI
 - **Intelligent Tool Use**: Automatically detects factual questions and uses the search tool
 - **Conversational AI**: Provides natural responses for general questions
 - **Memory**: Maintains conversation context using session-based memory
@@ -41,6 +42,20 @@ A simple AI agent built with LangGraph that intelligently answers user questions
 │    │                        │
 │    └─► SQLite Memory        │
 └─────────────────────────────┘
+```
+
+## 🏛️ Oracle of Delphi Frontend
+
+The frontend provides an immersive Greek mythology themed interface:
+
+- **Theme**: Ancient temple with Oracle priestess backdrop
+- **Styling**: Classical typography (Cinzel font), parchment-style card
+- **Interaction**: Type a question, receive a prophecy-style response
+
+**To use the frontend:**
+```bash
+# Simply open in browser
+oracle-delphi/index.html
 ```
 
 ## 🚀 Quick Start
@@ -155,17 +170,24 @@ Visit `http://localhost:8000/docs` for interactive API documentation powered by 
 
 ```
 .
-├── agent/
-│   ├── __init__.py
-│   ├── tools.py          # Dictionary-based search tool
-│   └── graph.py          # LangGraph agent logic
-├── api/
-│   ├── __init__.py
-│   ├── models.py         # Pydantic request/response models
-│   └── main.py           # FastAPI application
-├── test_agent.py         # Test script
-├── requirements.txt      # Python dependencies
-├── .env.example          # Environment template
+├── backend/
+│   ├── agent/
+│   │   ├── __init__.py
+│   │   ├── tools.py          # Dictionary-based search tool
+│   │   └── graph.py          # LangGraph agent logic
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── models.py         # Pydantic request/response models
+│   │   └── main.py           # FastAPI application
+│   └── test_agent.py         # Test script
+├── oracle-delphi/            # Frontend (Oracle of Delphi UI)
+│   ├── index.html
+│   ├── styles.css
+│   ├── app.js
+│   └── assets/
+│       └── background.png
+├── requirements.txt          # Python dependencies
+├── .env.example              # Environment template
 ├── .gitignore
 └── README.md
 ```

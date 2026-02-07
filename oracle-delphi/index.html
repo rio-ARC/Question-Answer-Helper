@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oracle of Delphi</title>
+    <meta name="description" content="Consult the ancient Oracle of Delphi and receive prophecy.">
+
+    <!-- Google Fonts: Cinzel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <h1 class="oracle-header">ORACLE OF DELPHI</h1>
+
+    <!-- Parchment Card -->
+    <main class="parchment">
+        <!-- Invocation -->
+        <p class="invocation">O Oracle, what is the fate of</p>
+
+        <!-- User's Question -->
+        <p class="question" id="question">my endeavors?</p>
+
+        <!-- Decorative Dot -->
+        <span class="divider"></span>
+
+        <!-- Oracle Response -->
+        <div class="response" id="response">
+            <p>The path unfolds in shadows and light, entwined with choice and chance. Persevere, and the threads of
+                fate may align to your purpose...</p>
+        </div>
+
+        <!-- Input Field -->
+        <input type="text" class="input-field" id="input" placeholder="Pose your question to the Oracle..."
+            autocomplete="off">
+
+        <!-- Submit Button -->
+        <button class="submit-btn" id="submitBtn">
+            Consult the <em>Oracle</em>
+        </button>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
