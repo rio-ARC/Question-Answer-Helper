@@ -1,170 +1,164 @@
-# AI Question-Answer Helper 🤖
+# Oracle of Delphi 🏛️
 
-A simple AI agent built with LangGraph that intelligently answers user questions, uses a dictionary-based search tool for factual queries, and maintains conversation memory. Features an immersive **Oracle of Delphi** themed frontend.
+An AI-powered oracle that speaks in prophecies, built with LangGraph, FastAPI, and vanilla JavaScript. Features ritualized response timing and an immersive Greek mythology theme.
+
+**Live Demo:** [oracle-of-delphi.vercel.app](https://oracle-of-delphi.vercel.app)
+
+---
 
 ## ✨ Features
 
-- **Oracle of Delphi Frontend**: Immersive Greek mythology themed UI
-- **Intelligent Tool Use**: Automatically detects factual questions and uses the search tool
-- **Conversational AI**: Provides natural responses for general questions
-- **Memory**: Maintains conversation context using session-based memory
-- **REST API**: FastAPI-based HTTP endpoint for easy integration
-- **LangGraph**: State machine architecture for robust agent behavior
+- **🔮 Prophetic Persona**: Oracle responds with metaphors and symbolic language, never mentioning modern concepts
+- **⏳ Ritualized Timing**: 1.5-4 second contemplation delay before each response for gravitas
+- **🧠 Session Memory**: Maintains conversation context within each browser session
+- **🏛️ Immersive UI**: Greek temple background with parchment-style interface
+- **⚡ Fast Inference**: Powered by Groq's LPU architecture (llama-3.3-70b-versatile)
+
+---
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────┐
-│   User      │
-└──────┬──────┘
-       │ HTTP Request
-       ▼
-┌─────────────┐
-│  FastAPI    │
-│  /chat      │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────────────────────┐
-│    LangGraph Agent          │
-│  ┌─────────┐                │
-│  │  Agent  │ ◄──────┐       │
-│  └────┬────┘        │       │
-│       │             │       │
-│       ▼             │       │
-│  Should use tool?   │       │
-│    ┌─Yes───No       │       │
-│    │      │         │       │
-│    ▼      ▼         │       │
-│  ┌────┐  End ───────┘       │
-│  │Tool│                     │
-│  └────┘                     │
-│    │                        │
-│    └─► SQLite Memory        │
-└─────────────────────────────┘
+┌──────────────────┐
+│  Vercel Frontend │  (oracle-delphi/)
+│  HTML/CSS/JS     │
+└────────┬─────────┘
+         │ HTTPS POST /chat
+         ▼
+┌──────────────────────────────────┐
+│   Render Backend (FastAPI)       │
+│  ┌────────────────────────────┐  │
+│  │  Ritual State Machine      │  │
+│  │  IDLE → INVOKED →          │  │
+│  │  CONTEMPLATING → REVEALING │  │
+│  └────────┬───────────────────┘  │
+│           │                       │
+│           ▼                       │
+│  ┌────────────────────────────┐  │
+│  │   LangGraph Oracle Agent   │  │
+│  │   + Oracle System Prompt   │  │
+│  └────────┬───────────────────┘  │
+│           │                       │
+│           ▼                       │
+│      In-Memory Session Storage    │
+└───────────┬───────────────────────┘
+            │ API call
+            ▼
+    ┌──────────────┐
+    │  Groq Cloud  │
+    │  (LLM runs)  │
+    └──────────────┘
 ```
 
-## 🏛️ Oracle of Delphi Frontend
+---
 
-The frontend provides an immersive Greek mythology themed interface:
+## � How It Works
 
-- **Theme**: Ancient temple with Oracle priestess backdrop
-- **Styling**: Classical typography (Cinzel font), parchment-style card
-- **Interaction**: Type a question, receive a prophecy-style response
+### 1. Ritual State Machine
 
-**To use the frontend:**
-```bash
-# Simply open in browser
-oracle-delphi/index.html
-```
+Each oracle consultation flows through 5 states:
 
-## 🚀 Quick Start
+| State | Duration | Purpose |
+|-------|----------|---------|
+| **IDLE** | Indefinite | Awaiting question |
+| **INVOKED** | <100ms | Question received |
+| **CONTEMPLATING** | 1.5-4s (random) | Deliberate silence |
+| **REVEALING** | Instant | Response delivered |
+| **COMPLETE** | 2s | Ritual complete |
+
+The contemplation delay runs **while** the LLM generates the response. If the LLM finishes early, the system waits for the contemplation timer to expire before revealing the response.
+
+### 2. Oracle Persona
+
+Every response is prefixed with this system prompt:
+
+> *"You are the Oracle of Delphi. You speak with calm authority and deliberate restraint. Your words are symbolic, measured, and timeless. You do not explain yourself. You do not give step-by-step instructions. You do not mention modern concepts, technology, or yourself. You answer as an oracle would: with insight, metaphor, and quiet certainty. You speak only when consulted."*
+
+### 3. Session Memory
+
+- **Frontend**: Generates unique `session_id` stored in `sessionStorage`
+- **Backend**: LangGraph's `MemorySaver` tracks conversation per session
+- **Limitation**: Memory resets if backend restarts (in-memory only)
+
+---
+
+## 🚀 Quick Start (Local Development)
 
 ### Prerequisites
 
-- Python 3.8+
-- Groq API key ([Get one here](https://console.groq.com/keys))
+- Python 3.11+
+- Groq API key ([Get one free here](https://console.groq.com/keys))
 
-### Installation
-
-1. **Clone or navigate to the project directory**
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   # Copy the example file
-   cp .env.example .env
-   
-   # Edit .env and add your Groq API key
-   # GROQ_API_KEY=your_actual_api_key_here
-   ```
-
-### Running the Server
+### 1. Clone & Install
 
 ```bash
+git clone https://github.com/rio-ARC/oracle-of-delphi.git
+cd oracle-of-delphi
+pip install -r requirements.txt
+```
+
+### 2. Configure Environment
+
+```bash
+# Create .env file in project root
+echo "GROQ_API_KEY=your_api_key_here" > .env
+```
+
+### 3. Run Backend
+
+```bash
+cd backend
 uvicorn api.main:app --reload --port 8000
 ```
 
-The server will start at `http://localhost:8000`
+Backend runs at `http://localhost:8000`
 
-## 📖 API Usage
+### 4. Run Frontend
 
-### Chat Endpoint
+Simply open `oracle-delphi/index.html` in your browser.
 
-**POST** `/chat`
+**Note:** Update `API_URL` in `oracle-delphi/app.js` to:
+```javascript
+const API_URL = 'http://localhost:8000/chat';
+```
 
-Send a message to the AI agent and receive a response.
+---
 
-#### Request Body
+## 📖 API Reference
 
+### POST `/chat`
+
+Consult the Oracle with a question.
+
+**Request:**
 ```json
 {
-  "message": "What is the capital of France?",
-  "session_id": "user-123"
+  "message": "What is my destiny?",
+  "session_id": "session-123"
 }
 ```
 
-#### Response
-
+**Response:**
 ```json
 {
-  "response": "The capital of France is Paris.",
-  "session_id": "user-123"
+  "response": "The path unfolds in shadows and light...",
+  "session_id": "session-123",
+  "ritual_state": {
+    "current_state": "COMPLETE",
+    "accepting_input": true
+  }
 }
 ```
 
-### Example with curl
+### GET `/health`
 
-```bash
-# Factual question (uses search tool)
-curl -X POST http://localhost:8000/chat ^
-  -H "Content-Type: application/json" ^
-  -d "{\"message\": \"What is the capital of Japan?\", \"session_id\": \"test\"}"
+Health check endpoint.
 
-# Conversational question
-curl -X POST http://localhost:8000/chat ^
-  -H "Content-Type: application/json" ^
-  -d "{\"message\": \"Hello! How are you?\", \"session_id\": \"test\"}"
-```
+### GET `/docs`
 
-### Example with Python
+Interactive Swagger UI documentation.
 
-```python
-import requests
-
-response = requests.post(
-    "http://localhost:8000/chat",
-    json={
-        "message": "What is the speed of light?",
-        "session_id": "my-session"
-    }
-)
-
-print(response.json()["response"])
-```
-
-## 🧪 Testing
-
-### Direct Agent Testing
-
-Run the test script to test the agent directly without the API:
-
-```bash
-python test_agent.py
-```
-
-This will test:
-- Factual questions that should trigger the search tool
-- Conversational questions that should get direct responses
-- Memory/context maintenance across messages
-
-### Interactive API Testing
-
-Visit `http://localhost:8000/docs` for interactive API documentation powered by Swagger UI.
+---
 
 ## 📂 Project Structure
 
@@ -172,97 +166,91 @@ Visit `http://localhost:8000/docs` for interactive API documentation powered by 
 .
 ├── backend/
 │   ├── agent/
-│   │   ├── __init__.py
-│   │   ├── tools.py          # Dictionary-based search tool
-│   │   └── graph.py          # LangGraph agent logic
+│   │   ├── tools.py          # Ritual State Machine (FSM)
+│   │   └── graph.py          # LangGraph Oracle agent
 │   ├── api/
-│   │   ├── __init__.py
-│   │   ├── models.py         # Pydantic request/response models
+│   │   ├── models.py         # Pydantic models
 │   │   └── main.py           # FastAPI application
-│   └── test_agent.py         # Test script
-├── oracle-delphi/            # Frontend (Oracle of Delphi UI)
+│   └── __init__.py
+├── oracle-delphi/            # Frontend
 │   ├── index.html
 │   ├── styles.css
 │   ├── app.js
 │   └── assets/
 │       └── background.png
-├── requirements.txt          # Python dependencies
-├── .env.example              # Environment template
-├── .gitignore
+├── requirements.txt
+├── Procfile                  # Render deployment
+├── runtime.txt               # Python version
+├── .env                      # Environment variables (gitignored)
 └── README.md
 ```
 
-## 🔧 How It Works
+---
 
-### 1. Tool System
-The `search_facts` tool contains a knowledge base with:
-- Country capitals
-- Population data
-- Science facts
-- Technology definitions
+## 🛠️ Tech Stack
 
-### 2. Agent Logic
-The LangGraph agent:
-1. Receives user message
-2. Uses LLM to determine if a tool is needed
-3. Calls the search tool if needed, or responds directly
-4. Maintains conversation history in SQLite
+| Layer | Technology |
+|-------|------------|
+| **LLM** | llama-3.3-70b-versatile (Groq) |
+| **Backend Framework** | FastAPI |
+| **Agent Framework** | LangGraph |
+| **Frontend** | Vanilla HTML/CSS/JS |
+| **Deployment** | Render (backend) + Vercel (frontend) |
 
-### 3. Memory
-- **Session-based**: Each `session_id` has separate conversation memory
-- **Persistent**: Uses SQLite checkpointing (in-memory by default)
-- **Context-aware**: Agent remembers previous messages in the session
+---
 
-## 🎯 Example Interactions
+## 🌐 Deployment
 
-### Factual Query
-```
-User: "What is the capital of Germany?"
-Agent: "The capital of Germany is Berlin."
-[Uses search tool]
-```
+### Backend (Render)
 
-### Conversational
-```
-User: "Hello! How are you?"
-Agent: "Hello! I'm doing great, thank you for asking! How can I help you today?"
-[Direct response, no tool]
-```
+1. Push to GitHub
+2. Create new **Web Service** on Render
+3. Set build command: `pip install -r requirements.txt`
+4. Set start command: `cd backend && uvicorn api.main:app --host 0.0.0.0 --port $PORT`
+5. Add environment variable: `GROQ_API_KEY`
 
-### With Memory
-```
-User: "What is the capital of France?"
-Agent: "The capital of France is Paris."
+### Frontend (Vercel)
 
-User: "What about its population?"
-Agent: "The population of Paris is approximately 2.2 million..."
-[Remembers "its" refers to Paris]
-```
+1. Update `API_URL` in `oracle-delphi/app.js` to your Render URL
+2. Push to GitHub
+3. Import project to Vercel
+4. Set root directory: `oracle-delphi`
+5. Deploy
 
-## 🛠️ Customization
+---
 
-### Adding More Facts
-Edit `agent/tools.py` and add entries to the `KNOWLEDGE_BASE` dictionary:
+## 🔧 Customization
+
+### Change the Oracle's Voice
+
+Edit the system prompt in `backend/agent/graph.py`:
 
 ```python
-KNOWLEDGE_BASE = {
-    "capital": {
-        "your_country": "Your Capital",
-        # Add more...
-    },
-    # Add more categories...
+ORACLE_SYSTEM_PROMPT = """Your custom oracle persona..."""
+```
+
+### Adjust Ritual Timing
+
+Edit `backend/agent/tools.py`:
+
+```python
+TIMING_CONFIG = {
+    "contemplation_min": 1.5,  # Minimum silence (seconds)
+    "contemplation_max": 4.0,  # Maximum silence (seconds)
 }
 ```
 
-### Changing the LLM
-Edit `agent/graph.py` to use a different model:
+### Change LLM Model
+
+Edit `backend/agent/graph.py`:
 
 ```python
-llm = ChatGroq(
-    model="llama3-70b-8192",  # Different model
-    temperature=0.5,          # Adjust temperature
-)
+llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.7, api_key=api_key)
 ```
+
+[See available models](https://console.groq.com/docs/models)
+
+---
 
 ## 📝 Environment Variables
 
@@ -270,35 +258,32 @@ llm = ChatGroq(
 |----------|-------------|----------|
 | `GROQ_API_KEY` | Your Groq API key | Yes |
 
-## 🐛 Troubleshooting
+---
 
-**Error: "GROQ_API_KEY not found"**
-- Make sure you've created a `.env` file with your API key
-- Check that the `.env` file is in the project root directory
+## 🐛 Known Limitations
 
-**Agent not using the search tool**
-- The LLM decides whether to use tools based on the query
-- Try more specific factual questions like "What is the capital of X?"
+- **Memory resets** on backend restart (in-memory storage)
+- **Cold starts** on Render free tier (~30s delay if inactive >15min)
+- **CORS** is open (`allow_origins=["*"]`) — restrict for production use
 
-**Memory not working**
-- Ensure you're using the same `session_id` for related messages
-- Memory is stored in-memory by default and resets when server restarts
+---
 
-## 📚 Learn More
+## 📚 Resources
 
-- [LangChain Documentation](https://python.langchain.com/)
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [Groq Documentation](https://console.groq.com/docs)
 
+---
+
 ## 🙏 Acknowledgments
 
 Built with:
-- **LangGraph** for agent orchestration
-- **FastAPI** for the REST API
-- **Groq** for fast LLM inference
-- **LangChain** for tool integration
+- **LangGraph** for state machine orchestration
+- **Groq** for blazing-fast LLM inference
+- **FastAPI** for the backend API
+- **Vercel & Render** for free hosting
 
 ---
 
-Happy coding! 🚀
+**Made by [Rio](https://github.com/rio-ARC)** | Inspired by ancient wisdom, powered by modern AI 🏛️✨
